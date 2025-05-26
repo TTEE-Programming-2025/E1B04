@@ -25,6 +25,7 @@ void enter_grades( void ) ;
 void display_grades( void ) ;
 void search_grades( void ) ;
 void grade_ranking( void ) ;
+int exit_system( void ) ;
 
 float calc_average(Student s) {
     return (s.math + s.physics + s.english) / 3.0;
@@ -58,6 +59,7 @@ int main ( void )
 	system("cls") ;
 	
 	char choice ;
+	int exit ;
 	
 	while(1)
 	{
@@ -80,6 +82,14 @@ int main ( void )
 			case 'd' :
 				grade_ranking() ;
 				break ;
+			case 'e' :
+				exit = exit_system( ) ;
+				if( exit == 1 )
+					return 0 ;
+				break ;
+			default :
+				printf("Invalid choice. Try again.\n") ;
+				system("pause") ;
 		}
 	}
 	
@@ -123,7 +133,7 @@ printf("| e. Exit system 			|\n") ;
 printf("------------------------------------\n") ;
 }
 
-void clear_screen()
+void clear_screen( void )
 {
 	system("cls") ;
 }
@@ -144,7 +154,7 @@ int get_valid_int(const char* prompt, int min, int max) {
     }
 }
 // a.
-void enter_grades() {
+void enter_grades( void ) {
     clear_screen();
 
     // 要求輸入學生人數
@@ -175,7 +185,7 @@ void enter_grades() {
 }
 
 // b.
-void display_grades() {
+void display_grades( void ) {
 	int i ;
     clear_screen();
     printf("Name\tID\tMath\tPhysics\tEnglish\tAverage\n");
@@ -189,11 +199,11 @@ void display_grades() {
     system("pause");
 }
 // c.
-void search_grades() {
+void search_grades( void ) {
     char search_name[50] ;
     int found = 0 , i ;
 
-    clear_screen();
+    clear_screen() ;
     printf("Enter the name to search: ");
     while (getchar() != '\n'); // 清除前次輸入緩衝
     fgets(search_name, sizeof(search_name), stdin);
@@ -220,7 +230,7 @@ void search_grades() {
 }
 
 // d.
-void grade_ranking() {
+void grade_ranking( void ) {
     Student temp;
     clear_screen();
 
@@ -244,6 +254,23 @@ void grade_ranking() {
 
     printf("\nPress any key to return to menu...\n");
     system("pause");
+}
+
+// e.
+int exit_system( void ) {
+    char confirm;
+    while (1) {
+        printf("Are you sure you want to exit? (y/n): ");
+        scanf(" %c", &confirm);
+        if (confirm == 'y') {
+            printf("Goodbye!\n");
+            return 1;
+        } else if (confirm == 'n') {
+            return 0;
+        } else {
+            printf("Invalid input.\n");
+        }
+    }
 }
 
 
