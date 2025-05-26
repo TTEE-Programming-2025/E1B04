@@ -11,6 +11,7 @@ typedef struct {
     int math;
     int physics;
     int english;
+    float average;
 } Student;
 
 Student students[MAX_STUDENTS];
@@ -21,6 +22,11 @@ void show_menu ( void ) ;
 void clear_screen() ;
 int get_valid_int(const char * , int , int ) ;
 void enter_student_grades() ;
+void display_grades() ;
+
+float calc_average(Student s) {
+    return (s.math + s.physics + s.english) / 3.0;
+}
 
 
 int main ( void )
@@ -62,6 +68,9 @@ int main ( void )
 		{
 			case 'a' :
 				enter_student_grades() ;
+				break ;
+			case 'b' :
+				display_grades() ;
 				break ;
 		}
 	}
@@ -159,3 +168,19 @@ void enter_student_grades() {
     clear_screen();
     show_menu();
 }
+
+void display_grades() {
+	int i ;
+    clear_screen();
+    printf("Name\tID\tMath\tPhysics\tEnglish\tAverage\n");
+    for ( i = 0 ; i < student_count ; i++ ) {
+        printf("%s\t%d\t%d\t%d\t%d\t%.1f\n",
+               students[i].name, students[i].id,
+               students[i].math, students[i].physics,
+               students[i].english, students[i].average);
+    }
+    printf("\nPress any key to return to menu...\n");
+    system("pause");
+}
+
+
