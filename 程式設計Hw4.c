@@ -34,10 +34,12 @@ float calc_average(Student s) {
 
 int main ( void )
 {
+	printf("心得:\n這次的作業相當有難度，花了不少間做，而且也是問了ChatGPT才知道程式細節長什麼樣子，整個程式相當的繁瑣，凡是任何一個細節漏掉都會導致系統編譯不過去，這次用我不熟悉的結構寫程式，寫的相當不順手。\n") ;
+	
 	my_style ( ) ;
 	
 	int pwd , counter = 0 ;
-	
+		
 	do
 	{
 		if( counter == 3 )
@@ -92,6 +94,7 @@ int main ( void )
 				system("pause") ;
 		}
 	}
+	
 	
 	return 0 ;
 	
