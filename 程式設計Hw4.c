@@ -163,6 +163,7 @@ void enter_student_grades() {
         students[i].math = get_valid_int("  Math score (0-100): ", 0, 100);
         students[i].physics = get_valid_int("  Physics score (0-100): ", 0, 100);
         students[i].english = get_valid_int("  English score (0-100): ", 0, 100);
+        students[i].average = calc_average(students[i]);
     }
 
     clear_screen();
