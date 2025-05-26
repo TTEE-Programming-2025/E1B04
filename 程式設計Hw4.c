@@ -19,10 +19,11 @@ int student_count = 0;
 
 void my_style ( void ) ;
 void show_menu ( void ) ;
-void clear_screen() ;
+void clear_screen( void ) ;
 int get_valid_int(const char * , int , int ) ;
-void enter_student_grades() ;
-void display_grades() ;
+void enter_student_grades( void ) ;
+void display_grades( void ) ;
+void search_grades( void ) ;
 
 float calc_average(Student s) {
     return (s.math + s.physics + s.english) / 3.0;
@@ -71,6 +72,9 @@ int main ( void )
 				break ;
 			case 'b' :
 				display_grades() ;
+				break ;
+			case 'c' :
+				search_grades() ;
 				break ;
 		}
 	}
@@ -180,6 +184,36 @@ void display_grades() {
                students[i].math, students[i].physics,
                students[i].english, students[i].average);
     }
+    printf("\nPress any key to return to menu...\n");
+    system("pause");
+}
+
+void search_grades() {
+    char search_name[50] ;
+    int found = 0 , i ;
+
+    clear_screen();
+    printf("Enter the name to search: ");
+    while (getchar() != '\n'); // 清除前次輸入緩衝
+    fgets(search_name, sizeof(search_name), stdin);
+    search_name[strcspn(search_name, "\n")] = '\0';
+
+    for ( i = 0 ; i < student_count ; i++ ) {
+        if (strcmp(students[i].name, search_name) == 0) {
+            printf("\nFound:\n");
+            printf("Name: %s\nID: %d\nMath: %d\nPhysics: %d\nEnglish: %d\nAverage: %.1f\n",
+                   students[i].name, students[i].id,
+                   students[i].math, students[i].physics,
+                   students[i].english, students[i].average);
+            found = 1;
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("Student not found.\n");
+    }
+
     printf("\nPress any key to return to menu...\n");
     system("pause");
 }
