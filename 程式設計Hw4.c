@@ -21,7 +21,7 @@ void my_style ( void ) ;
 void show_menu ( void ) ;
 void clear_screen( void ) ;
 int get_valid_int(const char * , int , int ) ;
-void enter_student_grades( void ) ;
+void enter_grades( void ) ;
 void display_grades( void ) ;
 void search_grades( void ) ;
 
@@ -68,7 +68,7 @@ int main ( void )
 		switch( choice )
 		{
 			case 'a' :
-				enter_student_grades() ;
+				enter_grades() ;
 				break ;
 			case 'b' :
 				display_grades() ;
@@ -124,55 +124,56 @@ void clear_screen()
 	system("cls") ;
 }
 
-int get_valid_int(const char *prompt, int min, int max) {
-    int value;
-    char newline;
+int get_valid_int(const char* prompt, int min, int max) {
+    int num;
+    char ch;
     while (1) {
         printf("%s", prompt);
-        if (scanf("%d%c", &value, &newline) != 2 || newline != '\n') {
+        if (scanf("%d%c", &num, &ch) != 2 || ch != '\n') {
             printf("Invalid input. Please enter an integer.\n");
-            fflush(stdin) ; // 清除緩衝區
-        } else if (value < min || value > max) {
+            while (getchar() != '\n'); // 清除緩衝區
+        } else if (num < min || num > max) {
             printf("Value must be between %d and %d.\n", min, max);
         } else {
-            return value;
+            return num;
         }
     }
 }
-
-void enter_student_grades() {
+// a.
+void enter_grades() {
     clear_screen();
-    int n = get_valid_int("Enter number of students (5~10): ", MIN_STUDENTS, MAX_STUDENTS);
-    student_count = n;
-	
+
+    // 要求輸入學生人數
+    student_count = get_valid_int("Enter number of students (5~10): ", MIN_STUDENTS, MAX_STUDENTS);
 	int i ;
-    for ( i = 0 ; i < n ; i++ ) {
-        printf("Student #%d:\n", i + 1);
+    for ( i = 0; i < student_count; i++) {
+        printf("\n--- Enter data for student #%d ---\n", i + 1);
 
-        printf("  Enter name: ");
-        while (getchar() != '\n'); // 清除前次輸入緩衝
+        // 清除上一輪輸入遺留的換行符號
+        while (getchar() != '\n');
+
+        // 輸入學生姓名（使用 fgets，可輸入有空格的姓名）
+        printf("  Name: ");
         fgets(students[i].name, sizeof(students[i].name), stdin);
-        students[i].name[strcspn(students[i].name, "\n")] = '\0'; // 去除換行符
 
-        while (1) {
-            printf("  Enter 6-digit ID: ");
-            if (scanf("%d", &students[i].id) != 1 || students[i].id < 100000 || students[i].id > 999999) {
-                printf("  Invalid ID. Must be a 6-digit integer.\n");
-                while (getchar() != '\n'); // 清除緩衝區
-            } else {
-                break;
-            }
-        }
+        // 去掉 fgets 讀進來的換行字元
+        students[i].name[strcspn(students[i].name, "\n")] = '\0';
 
-        students[i].math = get_valid_int("  Math score (0-100): ", 0, 100);
-        students[i].physics = get_valid_int("  Physics score (0-100): ", 0, 100);
-        students[i].english = get_valid_int("  English score (0-100): ", 0, 100);
+        // 輸入學號與成績（含錯誤檢查）
+        students[i].id = get_valid_int("  Student ID (6 digits): ", 100000, 999999);
+        students[i].math = get_valid_int("  Math score (0~100): ", 0, 100);
+        students[i].physics = get_valid_int("  Physics score (0~100): ", 0, 100);
+        students[i].english = get_valid_int("  English score (0~100): ", 0, 100);
+
+        // 計算平均
         students[i].average = calc_average(students[i]);
     }
 
-    clear_screen();
-    show_menu();
+    printf("\nAll student data entered successfully.\n");
+    printf("Returning to main menu...\n");
+    system("pause");
 }
+
 
 void display_grades() {
 	int i ;
