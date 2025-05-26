@@ -24,6 +24,7 @@ int get_valid_int(const char * , int , int ) ;
 void enter_grades( void ) ;
 void display_grades( void ) ;
 void search_grades( void ) ;
+void grade_ranking( void ) ;
 
 float calc_average(Student s) {
     return (s.math + s.physics + s.english) / 3.0;
@@ -75,6 +76,9 @@ int main ( void )
 				break ;
 			case 'c' :
 				search_grades() ;
+				break ;
+			case 'd' :
+				grade_ranking() ;
 				break ;
 		}
 	}
@@ -151,21 +155,17 @@ void enter_grades() {
 
         // 清除上一輪輸入遺留的換行符號
         while (getchar() != '\n');
-
-        // 輸入學生姓名（使用 fgets，可輸入有空格的姓名）
+        
         printf("  Name: ");
         fgets(students[i].name, sizeof(students[i].name), stdin);
 
-        // 去掉 fgets 讀進來的換行字元
         students[i].name[strcspn(students[i].name, "\n")] = '\0';
 
-        // 輸入學號與成績（含錯誤檢查）
+        // 輸入學號與成績（+錯誤檢查）
         students[i].id = get_valid_int("  Student ID (6 digits): ", 100000, 999999);
         students[i].math = get_valid_int("  Math score (0~100): ", 0, 100);
         students[i].physics = get_valid_int("  Physics score (0~100): ", 0, 100);
         students[i].english = get_valid_int("  English score (0~100): ", 0, 100);
-
-        // 計算平均
         students[i].average = calc_average(students[i]);
     }
 
@@ -174,7 +174,7 @@ void enter_grades() {
     system("pause");
 }
 
-
+// b.
 void display_grades() {
 	int i ;
     clear_screen();
@@ -188,7 +188,7 @@ void display_grades() {
     printf("\nPress any key to return to menu...\n");
     system("pause");
 }
-
+// c.
 void search_grades() {
     char search_name[50] ;
     int found = 0 , i ;
@@ -213,6 +213,33 @@ void search_grades() {
 
     if (!found) {
         printf("Student not found.\n");
+    }
+
+    printf("\nPress any key to return to menu...\n");
+    system("pause");
+}
+
+// d.
+void grade_ranking() {
+    Student temp;
+    clear_screen();
+
+    // 氣泡排序法，用平均值比較。
+	int i , j ; 
+    for ( i = 0 ; i < student_count - 1 ; i++ ) {
+        for ( j = 0 ; j < student_count - i - 1 ; j++ ) {
+            if (students[j].average < students[j + 1].average) {
+                temp = students[j];
+                students[j] = students[j + 1];
+                students[j + 1] = temp;
+            }
+        }
+    }
+
+    printf("Ranking by average:\n");
+    printf("Name\tID\tAverage\n");
+    for ( i = 0 ; i < student_count ; i++ ) {
+        printf("%s\t%d\t%.1f\n", students[i].name, students[i].id, students[i].average);
     }
 
     printf("\nPress any key to return to menu...\n");
